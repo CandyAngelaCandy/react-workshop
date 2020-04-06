@@ -2,8 +2,9 @@ import React, { useState, memo } from 'react';
 import styled from 'styled-components';
 import CustomizeInput from '../component/CustomizeInput/CustomizeInput';
 import CustomizeButton from '../component/CustomizeButton';
+import MultiSelect from '../component/MultiSelect/MultiSelect';
 
-export const Form: React.FC = (): JSX.Element => {
+const Form: React.FC = (): JSX.Element => {
   const [firstName, setFirstName] = useState('');
   const [LastName, setLastName] = useState('');
 
@@ -27,7 +28,7 @@ export const Form: React.FC = (): JSX.Element => {
         />
         <label className="gender">Gender:</label>
         <div>
-          <input type="radio" id="male" name="gender" value="male" checked/>
+          <input type="radio" id="male" name="gender" value="male" checked />
           <label htmlFor="male">male</label>
         </div>
         <div>
@@ -43,7 +44,7 @@ export const Form: React.FC = (): JSX.Element => {
           <option value="Senior Consultant">Senior Consultant</option>
           <option value="Lead Consultant">Lead Consultant</option>
         </select>
-
+        <MultiSelect />
         <CustomizeButton firstName={firstName} lastName={LastName} />
       </form>
     </FormWrapper>
@@ -57,6 +58,20 @@ const FormWrapper = styled.div`
   .grade,
   .skill {
     display: block;
+  }
+  .skill-box{
+     font-size: 11px;
+     width: 131px;
+     height: 19px;
+     border:1px solid rgb(238, 238, 238);
+  }
+  .skillOption {
+    width: 131px;
+    background-color: blue;
+  }
+  .active {
+    background-color: black;
+    color: white;
   }
 `;
 
