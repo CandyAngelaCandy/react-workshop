@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
-import Form from './pages/Form';
+import Form from './container/Form';
 
 const App: React.FC = (): JSX.Element => {
   return (
     <div className="App">
-      <Form />
+      <header className="App-header">黄燕燕 react workshop demo</header>
+      <main>
+        <Form />
+      </main>
     </div>
   );
 };
