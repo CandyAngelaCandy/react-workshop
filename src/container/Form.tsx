@@ -25,6 +25,25 @@ export const Form: React.FC = (): JSX.Element => {
           value={LastName}
           setValue={setLastName}
         />
+        <label className="gender">Gender:</label>
+        <div>
+          <input type="radio" id="male" name="gender" value="male" checked/>
+          <label htmlFor="male">male</label>
+        </div>
+        <div>
+          <input type="radio" id="female" name="gender" value="female" />
+          <label htmlFor="female">female</label>
+        </div>
+
+        <label className="grade" htmlFor="grade-select">
+          Grade:
+        </label>
+        <select name="grade" id="grade-select">
+          <option value="Junior Consultant">Junior Consultant</option>
+          <option value="Senior Consultant">Senior Consultant</option>
+          <option value="Lead Consultant">Lead Consultant</option>
+        </select>
+
         <CustomizeButton firstName={firstName} lastName={LastName} />
       </form>
     </FormWrapper>
@@ -33,7 +52,10 @@ export const Form: React.FC = (): JSX.Element => {
 
 const FormWrapper = styled.div`
   .title,
-  #submit-button {
+  #submit-button,
+  .gender,
+  .grade,
+  .skill {
     display: block;
   }
 `;
