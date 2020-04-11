@@ -1,5 +1,4 @@
 import React, { memo, useState } from 'react';
-import {dimgray} from "color-name";
 
 const MultiSelect: React.FC = (): JSX.Element => {
   const [isSkillListVisible, setIsSkillListVisible] = useState(false);
@@ -29,7 +28,7 @@ const MultiSelect: React.FC = (): JSX.Element => {
         Skill:
       </label>
       <div
-          className="skill-box"
+        className="skill-box"
         onClick={() => {
           setIsSkillListVisible(!isSkillListVisible);
         }}
@@ -49,7 +48,6 @@ const MultiSelect: React.FC = (): JSX.Element => {
               >
                 {skill}
               </div>
-
             );
           })}
       </div>

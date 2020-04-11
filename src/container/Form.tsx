@@ -1,30 +1,46 @@
-import React, { useState, memo } from 'react';
-import styled from 'styled-components';
-import CustomizeInput from '../component/CustomizeInput/CustomizeInput';
-import CustomizeButton from '../component/CustomizeButton';
-import MultiSelect from '../component/MultiSelect/MultiSelect';
+import React, { useState, memo } from "react";
+import styled from "styled-components";
+import CustomizeInput from "../component/CustomizeInput";
+import MultiSelect from "../component/MultiSelect/MultiSelect";
 
 const Form: React.FC = (): JSX.Element => {
-  const [firstName, setFirstName] = useState('');
-  const [LastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const handleSubmit = (): void => {
+    alert(firstName + " " + lastName);
+  };
+  const handleFirstNameChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event) => {
+    setFirstName(event.currentTarget.value);
+  };
+  const handleLastNameChange: (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => void = (event) => {
+    setLastName(event.currentTarget.value);
+  };
 
   return (
     <FormWrapper>
       <h1>Personal Info</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
         <CustomizeInput
           id="first-name"
           name="firstName"
           title="First name:"
           value={firstName}
-          setValue={setFirstName}
+          onChange={(event) => {
+            handleFirstNameChange(event);
+          }}
         />
         <CustomizeInput
           id="last-name"
           name="lastName"
-          title={'Last name:'}
-          value={LastName}
-          setValue={setLastName}
+          title={"Last name:"}
+          value={lastName}
+          onChange={(event) => {
+            handleLastNameChange(event);
+          }}
         />
         <label className="gender">Gender:</label>
         <div>
@@ -45,7 +61,7 @@ const Form: React.FC = (): JSX.Element => {
           <option value="Lead Consultant">Lead Consultant</option>
         </select>
         <MultiSelect />
-        <CustomizeButton firstName={firstName} lastName={LastName} />
+        <button id="submit-button">Submit</button>
       </form>
     </FormWrapper>
   );
@@ -59,11 +75,11 @@ const FormWrapper = styled.div`
   .skill {
     display: block;
   }
-  .skill-box{
-     font-size: 11px;
-     width: 131px;
-     height: 19px;
-     border:1px solid rgb(238, 238, 238);
+  .skill-box {
+    font-size: 11px;
+    width: 131px;
+    height: 19px;
+    border: 1px solid rgb(238, 238, 238);
   }
   .skillOption {
     width: 131px;
