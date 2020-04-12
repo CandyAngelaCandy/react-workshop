@@ -3,6 +3,14 @@ import styled from "styled-components";
 import CustomizeInput from "../component/CustomizeInput";
 import RadioInput from "../component/RadioInput";
 import Select, { SelectItem } from "../component/Select";
+import _ from "lodash";
+
+type ProvinceItem = {
+  text: string;
+  value: string;
+  isSelected: boolean;
+  city: SelectItem[];
+};
 
 const Form: React.FC = (): JSX.Element => {
   const [firstName, setFirstName] = useState("");
@@ -47,8 +55,67 @@ const Form: React.FC = (): JSX.Element => {
       isSelected: false,
     },
   ];
+  const defaultProvinceItems: ProvinceItem[] = [
+    {
+      value: "shaanxi",
+      text: "陕西省",
+      isSelected: false,
+      city: [
+        {
+          value: "baoji",
+          text: "宝鸡市",
+          isSelected: false,
+        },
+        {
+          value: "xian",
+          text: "西安市",
+          isSelected: false,
+        },
+        {
+          value: "xianyang",
+          text: "咸阳市",
+          isSelected: false,
+        },
+        {
+          value: "tongchuan",
+          text: "铜川市",
+          isSelected: false,
+        },
+      ],
+    },
+    {
+      value: "shanxi",
+      text: "山西省",
+      isSelected: false,
+      city: [
+        {
+          value: "taiyuan",
+          text: "太原市",
+          isSelected: false,
+        },
+        {
+          value: "yuncheng",
+          text: "运城市",
+          isSelected: false,
+        },
+        {
+          value: "wanrong",
+          text: "万荣市",
+          isSelected: false,
+        },
+        {
+          value: "changzhi",
+          text: "长治市",
+          isSelected: false,
+        },
+      ],
+    },
+  ];
+  const defaultCityItem: SelectItem[] = [];
   const [gradeItem, setGradeItem] = useState(defaultGradeItems);
   const [skillItem, setSkillItem] = useState(defaultSkillItems);
+  const [provinceItem, setProvinceItem] = useState(defaultProvinceItems);
+  const [cityItem, setCityItem] = useState(defaultCityItem);
 
   const handleSubmit = (): void => {
     alert(firstName + " " + lastName);
@@ -88,6 +155,31 @@ const Form: React.FC = (): JSX.Element => {
       return { ...item };
     });
     setSkillItem(updatedItems);
+  };
+  const handleProvinceClick: (ProvinceItem) => void = (selectedItem) => {
+    const updatedItems = provinceItem.map((item) => {
+      return {
+        ...item,
+        isSelected: item.value === selectedItem.value,
+      };
+    });
+    setProvinceItem(updatedItems);
+
+    const citys = updatedItems
+      .filter((item) => item.isSelected)
+      .map((item) => {
+        return item.city;
+      });
+    setCityItem(_.flatten(citys));
+  };
+  const handleCityClick: (SelectItem) => void = (selectedItem) => {
+    const updatedItems = cityItem.map((item) => {
+      return {
+        ...item,
+        isSelected: item.value === selectedItem.value,
+      };
+    });
+    setCityItem(updatedItems);
   };
 
   return (
@@ -148,6 +240,22 @@ const Form: React.FC = (): JSX.Element => {
           onItemClicked={handleSkillItemClick}
           isMultiple={true}
         />
+        <Select
+          id="province"
+          name="province"
+          items={provinceItem}
+          labelName="Province"
+          placeHolder="please select province"
+          onItemClicked={handleProvinceClick}
+        />
+        <Select
+          id="city"
+          name="city"
+          items={cityItem}
+          labelName="City"
+          placeHolder="please select city"
+          onItemClicked={handleCityClick}
+        />
         <button id="submit-button">Submit</button>
       </form>
     </FormWrapper>
@@ -201,6 +309,7 @@ const FormWrapper = styled.div`
     white-space: no-warp;
     border-bottom: 1px solid #ddd;
     padding: 4px 8px;
+    font-size: 11px;
   }
   .select-option.selected {
     opacity: 0.5;

@@ -34,7 +34,7 @@ const Select: React.FC<SelectProps> = ({
     .map((item) => item.text)
     .join(";");
   useEffect(() => {
-    document.addEventListener("click", (e) => {
+    document.addEventListener("click", () => {
       setIsOpenOptions(false);
     });
   });
