@@ -41,7 +41,7 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div className="select-container">
-      <label htmlFor={id}>{labelName}</label>
+      <label className="title" htmlFor={id}>{labelName}</label>
       <div
         className="select-text"
         onClick={(event) => {

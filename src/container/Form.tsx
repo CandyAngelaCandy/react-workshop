@@ -110,6 +110,33 @@ const Form: React.FC = (): JSX.Element => {
         },
       ],
     },
+    {
+      value: "henan",
+      text: "河南省",
+      isSelected: false,
+      city: [
+        {
+          value: "handan",
+          text: "邯郸市",
+          isSelected: false,
+        },
+        {
+          value: "zhengzhou",
+          text: "郑州市",
+          isSelected: false,
+        },
+        {
+          value: "luoyang",
+          text: "洛阳市",
+          isSelected: false,
+        },
+        {
+          value: "kaifeng",
+          text: "开封市",
+          isSelected: false,
+        },
+      ],
+    },
   ];
   const defaultCityItem: SelectItem[] = [];
   const [gradeItem, setGradeItem] = useState(defaultGradeItems);
@@ -158,10 +185,13 @@ const Form: React.FC = (): JSX.Element => {
   };
   const handleProvinceClick: (ProvinceItem) => void = (selectedItem) => {
     const updatedItems = provinceItem.map((item) => {
-      return {
-        ...item,
-        isSelected: item.value === selectedItem.value,
-      };
+      if (item.value === selectedItem.value) {
+        return {
+          ...item,
+          isSelected: !selectedItem.isSelected,
+        };
+      }
+      return { ...item };
     });
     setProvinceItem(updatedItems);
 
@@ -205,7 +235,7 @@ const Form: React.FC = (): JSX.Element => {
           }}
         />
         <fieldset>
-          <legend>Gender:</legend>
+          <legend className="title">Gender:</legend>
           <RadioInput
             id="male"
             name="gender"
@@ -227,7 +257,7 @@ const Form: React.FC = (): JSX.Element => {
           id="grade"
           name="grade"
           items={gradeItem}
-          labelName="Grade"
+          labelName="Grade:"
           placeHolder="please select grade"
           onItemClicked={handleGradeItemClick}
         />
@@ -235,7 +265,7 @@ const Form: React.FC = (): JSX.Element => {
           id="skill"
           name="skill"
           items={skillItem}
-          labelName="Skill"
+          labelName="Skill:"
           placeHolder="please select skill"
           onItemClicked={handleSkillItemClick}
           isMultiple={true}
@@ -244,26 +274,30 @@ const Form: React.FC = (): JSX.Element => {
           id="province"
           name="province"
           items={provinceItem}
-          labelName="Province"
+          labelName="Province:"
           placeHolder="please select province"
           onItemClicked={handleProvinceClick}
+          isMultiple={true}
         />
         <Select
           id="city"
           name="city"
           items={cityItem}
-          labelName="City"
+          labelName="City:"
           placeHolder="please select city"
           onItemClicked={handleCityClick}
         />
-        <button id="submit-button">Submit</button>
+        <button className="submit-btn" id="submit-button">
+          Submit
+        </button>
       </form>
     </FormWrapper>
   );
 };
 
 const FormWrapper = styled.div`
-  width: 160px;
+  font-size: 16px;
+  width: 180px;
   .title,
   #submit-button,
   .gender,
@@ -284,19 +318,20 @@ const FormWrapper = styled.div`
     color: white;
   }
   .select-container {
+    margin-top: 10px;
     position: relative;
   }
   .select-text {
     padding: 4px;
     border: 1px solid #ddd;
-    font-size: 11px;
   }
   .native-select {
     display: none;
   }
   .select-option-container {
+    width: 180px;
     position: absolute;
-    top: 23px;
+    top: 30px;
     left: 0px;
     padding: 0;
     list-style: none;
@@ -309,10 +344,17 @@ const FormWrapper = styled.div`
     white-space: no-warp;
     border-bottom: 1px solid #ddd;
     padding: 4px 8px;
-    font-size: 11px;
   }
   .select-option.selected {
     opacity: 0.5;
+  }
+  .title {
+    margin-bottom: 3px;
+    font-weight: bold;
+  }
+  .submit-btn {
+    margin-top: 10px;
+    font-size: 16px;
   }
 `;
 
