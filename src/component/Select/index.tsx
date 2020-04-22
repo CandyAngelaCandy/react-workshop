@@ -14,6 +14,7 @@ type SelectProps = {
   items: SelectItem[];
   onItemClicked: (SelectItem) => void;
   placeHolder: string;
+  setSelectedValue: Function;
 };
 
 const Select: React.FC<SelectProps> = ({
@@ -24,6 +25,7 @@ const Select: React.FC<SelectProps> = ({
   items,
   onItemClicked,
   placeHolder,
+  setSelectedValue,
 }) => {
   const [isOpenOptions, setIsOpenOptions] = useState(false);
   const selectedValues = items
@@ -37,11 +39,14 @@ const Select: React.FC<SelectProps> = ({
     document.addEventListener("click", () => {
       setIsOpenOptions(false);
     });
+    setSelectedValue(selectedText);
   });
 
   return (
     <div className="select-container">
-      <label className="title" htmlFor={id}>{labelName}</label>
+      <label className="title" htmlFor={id}>
+        {labelName}
+      </label>
       <div
         className="select-text"
         onClick={(event) => {

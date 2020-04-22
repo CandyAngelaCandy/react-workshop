@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect, useRef } from "react";
 import styled from "styled-components";
 import CustomizeInput from "../component/CustomizeInput";
 import RadioInput from "../component/RadioInput";
@@ -143,7 +143,36 @@ const Form: React.FC = (): JSX.Element => {
   const [skillItem, setSkillItem] = useState(defaultSkillItems);
   const [provinceItem, setProvinceItem] = useState(defaultProvinceItems);
   const [cityItem, setCityItem] = useState(defaultCityItem);
+  const [firstNameTip, setFirstNameTip] = useState("");
+  const [lastNameTip, setLastNameTip] = useState("");
+  const [isDisableSubmit, setIsDisableSubmit] = useState(true);
+  const [skillValue, setSkillValue] = useState("");
+  const [gradeValue, setGradeValue] = useState("");
+  const [provinceValue, setProvinceValue] = useState("");
+  const [cityValue, setCityValue] = useState("");
 
+  useEffect(() => {
+    validateForm();
+    console.log("gender", gender);
+  });
+  const validateFirstName = (firstName): void => {
+    if (!firstName) {
+      setFirstNameTip("The first name is required");
+    } else if (!/^[a-zA-Z]*$/.test(firstName)) {
+      setFirstNameTip("The first name must be arabic alphabet");
+    } else {
+      setFirstNameTip("");
+    }
+  };
+  const validateLastName = (lastName): void => {
+    if (!lastName) {
+      setLastNameTip("The last name is required");
+    } else if (!/^[a-zA-Z]*$/.test(lastName)) {
+      setLastNameTip("The last name must be arabic alphabet");
+    } else {
+      setLastNameTip("");
+    }
+  };
   const handleSubmit = (): void => {
     alert(firstName + " " + lastName);
   };
@@ -151,11 +180,13 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setFirstName(event.currentTarget.value);
+    validateFirstName(event.currentTarget.value);
   };
   const handleLastNameChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setLastName(event.currentTarget.value);
+    validateLastName(event.currentTarget.value);
   };
   const handleGenderChange: (
     event: React.ChangeEvent<HTMLInputElement>
@@ -211,10 +242,32 @@ const Form: React.FC = (): JSX.Element => {
     });
     setCityItem(updatedItems);
   };
+  const validateForm = () => {
+    let isFirstNameValid = true;
+    let isLastNameValid = true;
+    if (!firstName || !/^[a-zA-Z]*$/.test(firstName)) {
+      isFirstNameValid = false;
+    }
+    if (!lastName || !/^[a-zA-Z]*$/.test(lastName)) {
+      isLastNameValid = false;
+    }
+    if (
+      !isFirstNameValid ||
+      !isLastNameValid ||
+      !gradeValue ||
+      !cityValue ||
+      !provinceValue ||
+      !skillValue
+    ) {
+      setIsDisableSubmit(true);
+    } else {
+      setIsDisableSubmit(false);
+    }
+  };
 
   return (
     <FormWrapper>
-      <h1>Personal Info</h1>
+      <h1 className="header">Personal Info</h1>
       <form onSubmit={handleSubmit}>
         <CustomizeInput
           id="first-name"
@@ -225,6 +278,7 @@ const Form: React.FC = (): JSX.Element => {
             handleFirstNameChange(event);
           }}
         />
+        <label className="tip">{firstNameTip}</label>
         <CustomizeInput
           id="last-name"
           name="lastName"
@@ -234,6 +288,7 @@ const Form: React.FC = (): JSX.Element => {
             handleLastNameChange(event);
           }}
         />
+        <label className="tip">{lastNameTip}</label>
         <fieldset>
           <legend className="title">Gender:</legend>
           <RadioInput
@@ -260,6 +315,7 @@ const Form: React.FC = (): JSX.Element => {
           labelName="Grade:"
           placeHolder="please select grade"
           onItemClicked={handleGradeItemClick}
+          setSelectedValue={setGradeValue}
         />
         <Select
           id="skill"
@@ -269,6 +325,7 @@ const Form: React.FC = (): JSX.Element => {
           placeHolder="please select skill"
           onItemClicked={handleSkillItemClick}
           isMultiple={true}
+          setSelectedValue={setSkillValue}
         />
         <Select
           id="province"
@@ -278,6 +335,7 @@ const Form: React.FC = (): JSX.Element => {
           placeHolder="please select province"
           onItemClicked={handleProvinceClick}
           isMultiple={true}
+          setSelectedValue={setProvinceValue}
         />
         <Select
           id="city"
@@ -286,8 +344,13 @@ const Form: React.FC = (): JSX.Element => {
           labelName="City:"
           placeHolder="please select city"
           onItemClicked={handleCityClick}
+          setSelectedValue={setCityValue}
         />
-        <button className="submit-btn" id="submit-button">
+        <button
+          className="submit-btn"
+          id="submit-button"
+          disabled={isDisableSubmit}
+        >
           Submit
         </button>
       </form>
@@ -298,6 +361,9 @@ const Form: React.FC = (): JSX.Element => {
 const FormWrapper = styled.div`
   font-size: 16px;
   width: 180px;
+  .header {
+    width: 200px;
+  }
   .title,
   #submit-button,
   .gender,
@@ -355,6 +421,13 @@ const FormWrapper = styled.div`
   .submit-btn {
     margin-top: 10px;
     font-size: 16px;
+  }
+  .tip {
+    display: inline-block;
+    width: 200px;
+    margin-bottom: 7px;
+    font-size: 10px;
+    color: red;
   }
 `;
 
