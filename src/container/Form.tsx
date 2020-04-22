@@ -3,6 +3,7 @@ import styled from "styled-components";
 import CustomizeInput from "../component/CustomizeInput";
 import RadioInput from "../component/RadioInput";
 import Select, { SelectItem } from "../component/Select";
+import axios from "axios";
 import _ from "lodash";
 
 type ProvinceItem = {
@@ -174,7 +175,23 @@ const Form: React.FC = (): JSX.Element => {
     }
   };
   const handleSubmit = (): void => {
-    alert(firstName + " " + lastName);
+    axios
+      .post(`http://localhost:3000/employees/`, {
+        firstName: firstName,
+        lastName: lastName,
+        gender: gender,
+        grade: gradeValue,
+        skills: skillValue,
+        province: provinceValue,
+        city: cityValue,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    window.open(`http://localhost:3000/employees/`)
   };
   const handleFirstNameChange: (
     event: React.ChangeEvent<HTMLInputElement>
