@@ -6,6 +6,7 @@ import Select, { SelectItem } from "../component/Select";
 import axios from "axios";
 import _ from "lodash";
 import useSingleSelect from "../component/CustomizeHooks/useSingleSelect";
+import useMultipleSelect from "../component/CustomizeHooks/useMultipleSelect";
 
 type ProvinceItem = {
   text: string;
@@ -141,8 +142,8 @@ const Form: React.FC = (): JSX.Element => {
     },
   ];
   const defaultCityItem: SelectItem[] = [];
-  const [gradeItems, setSelectedGradeItem] = useSingleSelect(defaultGradeItems);
-  const [skillItem, setSkillItem] = useState(defaultSkillItems);
+  const [gradeItems, setSelectedGrade] = useSingleSelect(defaultGradeItems);
+  const [skillItems, setSelectedSkill] = useMultipleSelect(defaultSkillItems);
   const [provinceItem, setProvinceItem] = useState(defaultProvinceItems);
   const [cityItem, setCityItem] = useState(defaultCityItem);
   const [firstNameTip, setFirstNameTip] = useState("");
@@ -210,18 +211,6 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setGender(event.currentTarget.value);
-  };
-  const handleSkillItemClick: (SelectItem) => void = (selectedItem) => {
-    const updatedItems = skillItem.map((item) => {
-      if (item.value === selectedItem.value) {
-        return {
-          ...item,
-          isSelected: !selectedItem.isSelected,
-        };
-      }
-      return { ...item };
-    });
-    setSkillItem(updatedItems);
   };
   const handleProvinceClick: (ProvinceItem) => void = (selectedItem) => {
     const updatedItems = provinceItem.map((item) => {
@@ -323,16 +312,16 @@ const Form: React.FC = (): JSX.Element => {
           items={gradeItems}
           labelName="Grade:"
           placeHolder="please select grade"
-          onItemClicked={setSelectedGradeItem}
+          onItemClicked={setSelectedGrade}
           setSelectedValue={setGradeValue}
         />
         <Select
           id="skill"
           name="skill"
-          items={skillItem}
+          items={skillItems}
           labelName="Skill:"
           placeHolder="please select skill"
-          onItemClicked={handleSkillItemClick}
+          onItemClicked={setSelectedSkill}
           isMultiple={true}
           setSelectedValue={setSkillValue}
         />
