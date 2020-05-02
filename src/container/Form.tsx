@@ -5,6 +5,7 @@ import RadioInput from "../component/RadioInput";
 import Select, { SelectItem } from "../component/Select";
 import axios from "axios";
 import _ from "lodash";
+import useSingleSelect from "../component/CustomizeHooks/useSingleSelect";
 
 type ProvinceItem = {
   text: string;
@@ -140,7 +141,7 @@ const Form: React.FC = (): JSX.Element => {
     },
   ];
   const defaultCityItem: SelectItem[] = [];
-  const [gradeItem, setGradeItem] = useState(defaultGradeItems);
+  const [gradeItems, setSelectedGradeItem] = useSingleSelect(defaultGradeItems);
   const [skillItem, setSkillItem] = useState(defaultSkillItems);
   const [provinceItem, setProvinceItem] = useState(defaultProvinceItems);
   const [cityItem, setCityItem] = useState(defaultCityItem);
@@ -191,7 +192,7 @@ const Form: React.FC = (): JSX.Element => {
       .catch((error) => {
         console.log(error);
       });
-    window.open(`http://localhost:3000/employees/`)
+    window.open(`http://localhost:3000/employees/`);
   };
   const handleFirstNameChange: (
     event: React.ChangeEvent<HTMLInputElement>
@@ -209,15 +210,6 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setGender(event.currentTarget.value);
-  };
-  const handleGradeItemClick: (SelectItem) => void = (selectedItem) => {
-    const updatedItems = gradeItem.map((item) => {
-      return {
-        ...item,
-        isSelected: item.value === selectedItem.value,
-      };
-    });
-    setGradeItem(updatedItems);
   };
   const handleSkillItemClick: (SelectItem) => void = (selectedItem) => {
     const updatedItems = skillItem.map((item) => {
@@ -328,10 +320,10 @@ const Form: React.FC = (): JSX.Element => {
         <Select
           id="grade"
           name="grade"
-          items={gradeItem}
+          items={gradeItems}
           labelName="Grade:"
           placeHolder="please select grade"
-          onItemClicked={handleGradeItemClick}
+          onItemClicked={setSelectedGradeItem}
           setSelectedValue={setGradeValue}
         />
         <Select
