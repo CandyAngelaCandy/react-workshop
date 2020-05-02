@@ -11,14 +11,11 @@ const useSingleSelect: (
   const [items, setItems] = useState(defaultItems);
   const [selectedItem, setSelectedItem] = useState({} as SelectItem);
   useEffect(() => {
-    const updatedItems = defaultItems.map((item) => {
-      if (item.value === selectedItem.value) {
-        return {
-          ...item,
-          isSelected: !selectedItem.isSelected,
-        };
-      }
-      return { ...item };
+    const updatedItems = items.map((item) => {
+      return {
+        ...item,
+        isSelected: item.value === selectedItem.value,
+      };
     });
     if (JSON.stringify(updatedItems) !== JSON.stringify(items)) {
       setItems(updatedItems);
