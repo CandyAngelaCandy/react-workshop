@@ -5,6 +5,7 @@ type TCustomizeInputProps = {
   name: string;
   title: string;
   value: string;
+  errorMessage: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -18,6 +19,9 @@ const CustomizeInput: React.FC<TCustomizeInputProps> = ({
         {title}
       </label>
       <input {...inputProps} type="text" />
+      {inputProps.errorMessage && (
+        <label className="tip">{inputProps.errorMessage}</label>
+      )}
     </>
   );
 };

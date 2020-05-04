@@ -8,6 +8,7 @@ import _ from "lodash";
 import useSingleSelect from "../component/CustomizeHooks/useSingleSelect";
 import useMultipleSelect from "../component/CustomizeHooks/useMultipleSelect";
 import useProvinceCitys from "../component/CustomizeHooks/useProvinceCitys";
+import useNameInput from "../component/CustomizeHooks/useNameInput";
 import { PROVINCE_META_DATA, ProvinceName } from "../constant/citys";
 
 type ProvinceItem = {
@@ -18,8 +19,9 @@ type ProvinceItem = {
 };
 
 const Form: React.FC = (): JSX.Element => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName, firstNameErrorMessage] = useNameInput("");
+  const [lastName, setLastName, lastNameErrorMessage] = useNameInput("");
+
   const [gender, setGender] = useState("");
   const defaultGradeItems: SelectItem[] = [
     {
@@ -96,8 +98,6 @@ const Form: React.FC = (): JSX.Element => {
     }
   }, [citys]);
 
-  const [firstNameTip, setFirstNameTip] = useState("");
-  const [lastNameTip, setLastNameTip] = useState("");
   const [isDisableSubmit, setIsDisableSubmit] = useState(true);
   const [skillValue, setSkillValue] = useState("");
   const [gradeValue, setGradeValue] = useState("");
@@ -107,24 +107,6 @@ const Form: React.FC = (): JSX.Element => {
   useEffect(() => {
     validateForm();
   });
-  const validateFirstName = (firstName): void => {
-    if (!firstName) {
-      setFirstNameTip("The first name is required");
-    } else if (!/^[a-zA-Z]*$/.test(firstName)) {
-      setFirstNameTip("The first name must be arabic alphabet");
-    } else {
-      setFirstNameTip("");
-    }
-  };
-  const validateLastName = (lastName): void => {
-    if (!lastName) {
-      setLastNameTip("The last name is required");
-    } else if (!/^[a-zA-Z]*$/.test(lastName)) {
-      setLastNameTip("The last name must be arabic alphabet");
-    } else {
-      setLastNameTip("");
-    }
-  };
   const handleSubmit = (): void => {
     axios
       .post(`http://localhost:3000/employees/`, {
@@ -148,13 +130,11 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setFirstName(event.currentTarget.value);
-    validateFirstName(event.currentTarget.value);
   };
   const handleLastNameChange: (
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setLastName(event.currentTarget.value);
-    validateLastName(event.currentTarget.value);
   };
   const handleGenderChange: (
     event: React.ChangeEvent<HTMLInputElement>
@@ -193,21 +173,21 @@ const Form: React.FC = (): JSX.Element => {
           name="firstName"
           title="First name:"
           value={firstName}
+          errorMessage={firstNameErrorMessage}
           onChange={(event) => {
             handleFirstNameChange(event);
           }}
         />
-        <label className="tip">{firstNameTip}</label>
         <CustomizeInput
           id="last-name"
           name="lastName"
           title={"Last name:"}
           value={lastName}
+          errorMessage={lastNameErrorMessage}
           onChange={(event) => {
             handleLastNameChange(event);
           }}
         />
-        <label className="tip">{lastNameTip}</label>
         <fieldset>
           <legend className="title">Gender:</legend>
           <RadioInput
