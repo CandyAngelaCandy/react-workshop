@@ -7,6 +7,8 @@ import axios from "axios";
 import _ from "lodash";
 import useSingleSelect from "../component/CustomizeHooks/useSingleSelect";
 import useMultipleSelect from "../component/CustomizeHooks/useMultipleSelect";
+import useProvinceCitys from "../component/CustomizeHooks/useProvinceCitys";
+import { PROVINCE_META_DATA, ProvinceName } from "../constant/citys";
 
 type ProvinceItem = {
   text: string;
@@ -58,94 +60,42 @@ const Form: React.FC = (): JSX.Element => {
       isSelected: false,
     },
   ];
-  const defaultProvinceItems: ProvinceItem[] = [
-    {
-      value: "shaanxi",
-      text: "陕西省",
-      isSelected: false,
-      city: [
-        {
-          value: "baoji",
-          text: "宝鸡市",
-          isSelected: false,
-        },
-        {
-          value: "xian",
-          text: "西安市",
-          isSelected: false,
-        },
-        {
-          value: "xianyang",
-          text: "咸阳市",
-          isSelected: false,
-        },
-        {
-          value: "tongchuan",
-          text: "铜川市",
-          isSelected: false,
-        },
-      ],
-    },
-    {
-      value: "shanxi",
-      text: "山西省",
-      isSelected: false,
-      city: [
-        {
-          value: "taiyuan",
-          text: "太原市",
-          isSelected: false,
-        },
-        {
-          value: "yuncheng",
-          text: "运城市",
-          isSelected: false,
-        },
-        {
-          value: "wanrong",
-          text: "万荣市",
-          isSelected: false,
-        },
-        {
-          value: "changzhi",
-          text: "长治市",
-          isSelected: false,
-        },
-      ],
-    },
-    {
-      value: "henan",
-      text: "河南省",
-      isSelected: false,
-      city: [
-        {
-          value: "handan",
-          text: "邯郸市",
-          isSelected: false,
-        },
-        {
-          value: "zhengzhou",
-          text: "郑州市",
-          isSelected: false,
-        },
-        {
-          value: "luoyang",
-          text: "洛阳市",
-          isSelected: false,
-        },
-        {
-          value: "kaifeng",
-          text: "开封市",
-          isSelected: false,
-        },
-      ],
-    },
-  ];
-  const defaultCityItem: SelectItem[] = [];
   const [gradeItems, setSelectedGrade] = useSingleSelect(defaultGradeItems);
   const [skillItems, setSelectedSkill] = useMultipleSelect(defaultSkillItems);
-  const [provinceItem, setProvinceItem] = useState(defaultProvinceItems);
-  const [cityItem, setCityItem] = useState(defaultCityItem);
+
+  const [citys, setProvince] = useProvinceCitys("");
+  const defaultProvinceItems = PROVINCE_META_DATA.map((province) => ({
+    value: province.id,
+    text: province.name,
+    isSelected: false,
+  }));
+  const defaultCityItem = citys.map((city) => ({
+    value: city.id,
+    text: city.name,
+    isSelected: false,
+  }));
+
+  const [cityItems, setSelectedCity, resetCityItems] = useSingleSelect(
+    defaultCityItem
+  );
+  const [provinceItems, setSelectedProvince] = useSingleSelect(
+    defaultProvinceItems
+  );
+  useEffect(() => {
+    if (citys.length === 0) return;
+    const isCitysChanged = !citys.some((city) => {
+      cityItems.find((cityItem) => cityItem.value === city.id);
+    });
+    if (isCitysChanged) {
+      const newCityItems = citys.map((city) => ({
+        value: city.id,
+        text: city.name,
+        isSelected: false,
+      }));
+      resetCityItems(newCityItems);
+    }
+  }, [citys]);
+
   const [firstNameTip, setFirstNameTip] = useState("");
   const [lastNameTip, setLastNameTip] = useState("");
   const [isDisableSubmit, setIsDisableSubmit] = useState(true);
@@ -156,7 +106,6 @@ const Form: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     validateForm();
-    console.log("gender", gender);
   });
   const validateFirstName = (firstName): void => {
     if (!firstName) {
@@ -211,34 +160,6 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setGender(event.currentTarget.value);
-  };
-  const handleProvinceClick: (ProvinceItem) => void = (selectedItem) => {
-    const updatedItems = provinceItem.map((item) => {
-      if (item.value === selectedItem.value) {
-        return {
-          ...item,
-          isSelected: !selectedItem.isSelected,
-        };
-      }
-      return { ...item };
-    });
-    setProvinceItem(updatedItems);
-
-    const citys = updatedItems
-      .filter((item) => item.isSelected)
-      .map((item) => {
-        return item.city;
-      });
-    setCityItem(_.flatten(citys));
-  };
-  const handleCityClick: (SelectItem) => void = (selectedItem) => {
-    const updatedItems = cityItem.map((item) => {
-      return {
-        ...item,
-        isSelected: item.value === selectedItem.value,
-      };
-    });
-    setCityItem(updatedItems);
   };
   const validateForm = () => {
     let isFirstNameValid = true;
@@ -328,20 +249,22 @@ const Form: React.FC = (): JSX.Element => {
         <Select
           id="province"
           name="province"
-          items={provinceItem}
+          items={provinceItems}
           labelName="Province:"
           placeHolder="please select province"
-          onItemClicked={handleProvinceClick}
-          isMultiple={true}
+          onItemClicked={(selectedProvince) => {
+            setSelectedProvince(selectedProvince);
+            setProvince(selectedProvince.text as ProvinceName);
+          }}
           setSelectedValue={setProvinceValue}
         />
         <Select
           id="city"
           name="city"
-          items={cityItem}
+          items={cityItems}
           labelName="City:"
           placeHolder="please select city"
-          onItemClicked={handleCityClick}
+          onItemClicked={setSelectedCity}
           setSelectedValue={setCityValue}
         />
         <button
