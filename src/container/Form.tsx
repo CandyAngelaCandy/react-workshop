@@ -98,25 +98,38 @@ const Form: React.FC = (): JSX.Element => {
     }
   }, [citys]);
 
-  const [isDisableSubmit, setIsDisableSubmit] = useState(true);
-  const [skillValue, setSkillValue] = useState("");
-  const [gradeValue, setGradeValue] = useState("");
-  const [provinceValue, setProvinceValue] = useState("");
-  const [cityValue, setCityValue] = useState("");
-
   useEffect(() => {
-    validateForm();
-  });
+    const hasSelectedValue = (items) => items.some((item) => item.isSelected);
+    const isValid =
+      firstName &&
+      lastName &&
+      !firstNameErrorMessage &&
+      !lastNameErrorMessage &&
+      gender !== "" &&
+      hasSelectedValue(gradeItems) &&
+      hasSelectedValue(skillItems) &&
+      hasSelectedValue(cityItems) &&
+      hasSelectedValue(provinceItems);
+    setValidStatus(isValid);
+  }, [
+    firstName,
+    lastName,
+    firstNameErrorMessage,
+    lastNameErrorMessage,
+    gender,
+    gradeItems,
+    skillItems,
+    cityItems,
+    provinceItems,
+  ]);
+  const [isValid, setValidStatus] = useState(false);
+
   const handleSubmit = (): void => {
     axios
       .post(`http://localhost:3000/employees/`, {
         firstName: firstName,
         lastName: lastName,
         gender: gender,
-        grade: gradeValue,
-        skills: skillValue,
-        province: provinceValue,
-        city: cityValue,
       })
       .then((res) => {
         console.log(res);
@@ -140,28 +153,6 @@ const Form: React.FC = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => void = (event) => {
     setGender(event.currentTarget.value);
-  };
-  const validateForm = () => {
-    let isFirstNameValid = true;
-    let isLastNameValid = true;
-    if (!firstName || !/^[a-zA-Z]*$/.test(firstName)) {
-      isFirstNameValid = false;
-    }
-    if (!lastName || !/^[a-zA-Z]*$/.test(lastName)) {
-      isLastNameValid = false;
-    }
-    if (
-      !isFirstNameValid ||
-      !isLastNameValid ||
-      !gradeValue ||
-      !cityValue ||
-      !provinceValue ||
-      !skillValue
-    ) {
-      setIsDisableSubmit(true);
-    } else {
-      setIsDisableSubmit(false);
-    }
   };
 
   return (
@@ -196,7 +187,7 @@ const Form: React.FC = (): JSX.Element => {
             labelName="Male"
             checked={gender === "male"}
             onChange={handleGenderChange}
-            value={gender}
+            value="male"
           />
           <RadioInput
             id="female"
@@ -204,7 +195,7 @@ const Form: React.FC = (): JSX.Element => {
             labelName="Female"
             checked={gender === "female"}
             onChange={handleGenderChange}
-            value={gender}
+            value="female"
           />
         </fieldset>
         <Select
@@ -214,7 +205,6 @@ const Form: React.FC = (): JSX.Element => {
           labelName="Grade:"
           placeHolder="please select grade"
           onItemClicked={setSelectedGrade}
-          setSelectedValue={setGradeValue}
         />
         <Select
           id="skill"
@@ -224,7 +214,6 @@ const Form: React.FC = (): JSX.Element => {
           placeHolder="please select skill"
           onItemClicked={setSelectedSkill}
           isMultiple={true}
-          setSelectedValue={setSkillValue}
         />
         <Select
           id="province"
@@ -236,7 +225,6 @@ const Form: React.FC = (): JSX.Element => {
             setSelectedProvince(selectedProvince);
             setProvince(selectedProvince.text as ProvinceName);
           }}
-          setSelectedValue={setProvinceValue}
         />
         <Select
           id="city"
@@ -245,13 +233,8 @@ const Form: React.FC = (): JSX.Element => {
           labelName="City:"
           placeHolder="please select city"
           onItemClicked={setSelectedCity}
-          setSelectedValue={setCityValue}
         />
-        <button
-          className="submit-btn"
-          id="submit-button"
-          disabled={isDisableSubmit}
-        >
+        <button className="submit-btn" id="submit-button" disabled={!isValid}>
           Submit
         </button>
       </form>
