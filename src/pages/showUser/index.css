@@ -1,0 +1,31 @@
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-item + .user-item {
+  margin-top: 10px;
+  border-top: 1px solid #f4f4f4;
+}
+
+.user-name {
+  color: #444;
+  padding-left: 8px;
+  border-left: 6px solid #222;
+}
+
+.user-gender,
+.user-grade,
+.user-skill,
+.user-province,
+.user-city {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}

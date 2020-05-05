@@ -1,15 +1,15 @@
-import React, { useState, memo, useEffect, useRef } from "react";
+import React, { useState, memo, useEffect } from "react";
 import styled from "styled-components";
-import CustomizeInput from "../component/CustomizeInput";
-import RadioInput from "../component/RadioInput";
-import Select, { SelectItem } from "../component/Select";
-import axios from "axios";
-import useSingleSelect from "../component/CustomizeHooks/useSingleSelect";
-import useMultipleSelect from "../component/CustomizeHooks/useMultipleSelect";
-import useProvinceCitys from "../component/CustomizeHooks/useProvinceCitys";
-import useNameInput from "../component/CustomizeHooks/useNameInput";
-import { PROVINCE_META_DATA, ProvinceName } from "../constant/citys";
-import { addUser } from "../api/user";
+import CustomizeInput from "../../component/CustomizeInput";
+import RadioInput from "../../component/RadioInput";
+import Select, { SelectItem } from "../../component/Select";
+import useSingleSelect from "../../component/CustomizeHooks/useSingleSelect";
+import useMultipleSelect from "../../component/CustomizeHooks/useMultipleSelect";
+import useProvinceCitys from "../../component/CustomizeHooks/useProvinceCitys";
+import useNameInput from "../../component/CustomizeHooks/useNameInput";
+import { useHistory } from "react-router-dom";
+import { PROVINCE_META_DATA, ProvinceName } from "../../constant/citys";
+import { addUser } from "../../api/user";
 
 type ProvinceItem = {
   text: string;
@@ -142,6 +142,7 @@ const Form: React.FC = (): JSX.Element => {
         city: tryGetSelectedItem(cityItems),
       }).then((res) => {
         if (res.data.id) {
+          history.push("/show");
           alert("success");
         }
       });
@@ -163,6 +164,8 @@ const Form: React.FC = (): JSX.Element => {
   ) => void = (event) => {
     setGender(event.currentTarget.value);
   };
+
+  const history = useHistory();
 
   return (
     <FormWrapper>

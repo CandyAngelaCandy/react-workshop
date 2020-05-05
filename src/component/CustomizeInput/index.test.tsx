@@ -9,7 +9,8 @@ describe('test CustomizeInput component', () => {
         id="mockId"
         name="mockName"
         title="mockTitle"
-        value="mackInputValue"
+        value="mockInputValue"
+        errorMessage="mockErrorMessage"
         onChange={() => {}}
       />
     );
@@ -35,6 +36,7 @@ describe('test CustomizeInput component', () => {
         name="mockName"
         title="mockTitle"
         value="mackInputValue"
+        errorMessage="mockErrorMessage"
         onChange={handleInputClick}
       />
     );

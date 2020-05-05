@@ -1,0 +1,61 @@
+{
+  "user": [
+    {
+      "firstName": "yan",
+      "lastName": "huang",
+      "isMale": false,
+      "skill": [
+        "c++",
+        "javascript",
+        "html",
+        "css"
+      ],
+      "grade": "junior consultant",
+      "province": "110000",
+      "city": "110100",
+      "id": 1
+    },
+    {
+      "firstName": "yan",
+      "lastName": "huang",
+      "isMale": false,
+      "skill": [
+        "c++",
+        "javascript",
+        "html",
+        "css"
+      ],
+      "grade": "junior consultant",
+      "province": "110000",
+      "city": "110100",
+      "id": 2
+    },
+    {
+      "firstName": "yan",
+      "lastName": "huang",
+      "isMale": false,
+      "skill": [
+        "c++",
+        "javascript",
+        "html",
+        "css"
+      ],
+      "grade": "junior consultant",
+      "province": "110000",
+      "city": "110100",
+      "id": 3
+    },
+    {
+      "firstName": "fu",
+      "lastName": "du",
+      "isMale": true,
+      "skill": [
+        "javascript"
+      ],
+      "grade": "junior consultant",
+      "province": "120000",
+      "city": "120100",
+      "id": 4
+    }
+  ]
+}
