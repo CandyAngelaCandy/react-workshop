@@ -14,7 +14,7 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "jest": "^24.9.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "prettier": "^2.0.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
